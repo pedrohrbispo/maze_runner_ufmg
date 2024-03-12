@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <stack>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <bits/stdc++.h>
+
 
 // Matriz de char representnado o labirinto
 char** maze; // Voce também pode representar o labirinto como um vetor de vetores de char (vector<vector<char>>)
@@ -17,6 +22,7 @@ struct pos_t {
 // Estrutura de dados contendo as próximas
 // posicões a serem exploradas no labirinto
 std::stack<pos_t> valid_positions;
+char* splitStringBySpace(char * str);
 /* Inserir elemento: 
 
 	 pos_t pos;
@@ -33,12 +39,39 @@ std::stack<pos_t> valid_positions;
 // Remover o primeiro elemento do vetor: 
 //    valid_positions.pop();
 
+//https://favtutor.com/blogs/split-string-cpp  split function
+
+
+void readFile(const char* file_name) {
+	std::ifstream mazeFile(file_name);
+	std::string line;
+
+	std::string firstLine;
+	getline(mazeFile, firstLine);
+	std::cout << firstLine << "file" << "\n";
+	// char * arrayNumAndCols = strtok(firstLine.data(), " ");
+
+    // while (arrayNumAndCols != NULL) {
+    //     std::cout << arrayNumAndCols << "\n";
+    //     arrayNumAndCols = strtok(NULL, " ");
+    // }
+
+	// if (mazeFile.is_open()) {
+		while (getline(mazeFile, line)) {
+			std::cout << line << "\n";
+		}
+		mazeFile.close();
+    // }
+	// Close the file
+	mazeFile.close();
+}
 
 // Função que le o labirinto de um arquivo texto, carrega em 
 // memória e retorna a posição inicial
 pos_t load_maze(const char* file_name) {
 	pos_t initial_pos;
 	// Abre o arquivo para leitura (fopen)
+	readFile(file_name);
 
 	// Le o numero de linhas e colunas (fscanf) 
 	// e salva em num_rows e num_cols
@@ -101,8 +134,8 @@ bool walk(pos_t pos) {
 
 int main(int argc, char* argv[]) {
 	// carregar o labirinto com o nome do arquivo recebido como argumento
+    	
 	pos_t initial_pos = load_maze(argv[1]);
-	printf("%s", argv);
 	// chamar a função de navegação
 	bool exit_found = walk(initial_pos);
 	
