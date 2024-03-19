@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <vector>
 #include <bits/stdc++.h>
 
 
@@ -42,40 +44,64 @@ char* splitStringBySpace(char * str);
 //https://favtutor.com/blogs/split-string-cpp  split function
 
 
-void readFile(const char* file_name) {
-	std::ifstream mazeFile(file_name);
-	std::string line;
+// void readFile(const char* file_name) {
+// 	std::ifstream mazeFile(file_name);
+// 	std::string line;
 
+// 	std::string firstLine;
+// 	getline(mazeFile, firstLine);
+// 	std::cout << firstLine << "file" << "\n";
+// 	std::istringstream iss(firstLine);
+// 	int num;
+// 	std::vector<int> numbers;
+	
+// 	while (iss >> num) {
+// 		numbers.push_back(num);
+// 	}
+
+// 	std::cout << numbers[0] << "num 1 \n";
+// 	std::cout << numbers[1] << "num2 \n";
+
+// 	if (mazeFile.is_open()) {
+// 		while (getline(mazeFile, line)) {
+// 			std::cout << line << "\n";
+// 		}
+// 		mazeFile.close();
+//     }
+// 	mazeFile.close();
+// }
+
+std::vector<int> getRowsAndCols(const char* file_name) {
+
+	std::ifstream mazeFile(file_name);
 	std::string firstLine;
 	getline(mazeFile, firstLine);
-	std::cout << firstLine << "file" << "\n";
-	// char * arrayNumAndCols = strtok(firstLine.data(), " ");
-
-    // while (arrayNumAndCols != NULL) {
-    //     std::cout << arrayNumAndCols << "\n";
-    //     arrayNumAndCols = strtok(NULL, " ");
-    // }
-
-	// if (mazeFile.is_open()) {
-		while (getline(mazeFile, line)) {
-			std::cout << line << "\n";
-		}
-		mazeFile.close();
-    // }
-	// Close the file
-	mazeFile.close();
+	std::istringstream iss(firstLine);
+	int num;
+	std::vector<int> numbers;
+	
+	while (iss >> num) {
+		numbers.push_back(num);
+	}
+	return numbers;
 }
 
 // Função que le o labirinto de um arquivo texto, carrega em 
 // memória e retorna a posição inicial
 pos_t load_maze(const char* file_name) {
 	pos_t initial_pos;
-	// Abre o arquivo para leitura (fopen)
-	readFile(file_name);
-
+	std::ifstream mazeFile(file_name);
+	std::string line;
 	// Le o numero de linhas e colunas (fscanf) 
 	// e salva em num_rows e num_cols
 
+	std::vector<int> rowsAndCols =  getRowsAndCols(file_name);
+	num_rows= rowsAndCols[0];
+	num_cols = rowsAndCols[1];
+	
+	std::cout<<num_cols<<"nums 1 \n";
+	std::cout<<num_rows<<"nums 1 \n";
+	
 	// Aloca a matriz maze (malloc)
 	for (int i = 0; i < num_rows; ++i)
 		// Aloca cada linha da matriz
@@ -134,7 +160,7 @@ bool walk(pos_t pos) {
 
 int main(int argc, char* argv[]) {
 	// carregar o labirinto com o nome do arquivo recebido como argumento
-    	
+    std::cout<<argv[1];
 	pos_t initial_pos = load_maze(argv[1]);
 	// chamar a função de navegação
 	bool exit_found = walk(initial_pos);
